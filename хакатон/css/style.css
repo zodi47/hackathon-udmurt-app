@@ -1,0 +1,211 @@
+
+@font-face { font-family: 'Noto Sans'; font-weight: 400; font-display: swap; src: url('../font/noto-sans-latin-400-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+@font-face { font-family: 'Noto Sans'; font-weight: 400; font-display: swap; src: url('../font/noto-sans-cyrillic-400-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: 'Noto Sans'; font-weight: 400; font-display: swap; src: url('../font/noto-sans-cyrillic-ext-400-normal.woff2') format('woff2'); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F; }
+@font-face { font-family: 'Noto Sans'; font-weight: 800; font-display: swap; src: url('../font/noto-sans-latin-800-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+@font-face { font-family: 'Noto Sans'; font-weight: 800; font-display: swap; src: url('../font/noto-sans-cyrillic-800-normal.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: 'Noto Sans'; font-weight: 800; font-display: swap; src: url('../font/noto-sans-cyrillic-ext-800-normal.woff2') format('woff2'); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F; }
+
+
+:root {
+    --red: #c8102e;
+    --red-dark: #9e0c24;
+    --black: #1d1d1b;
+    --cream: #fff8ee;
+    --white: #ffffff;
+    --muted: #7a6f63;
+    --line: #eadfce;
+
+    --radius: 22px;
+    --gap: 16px;
+    --tap: 56px;
+    --shadow: 0 5px 0 rgba(29, 29, 27, 0.13);
+}
+
+* { box-sizing: border-box; }
+
+[hidden] { display: none !important; }
+
+html, body { margin: 0; }
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--cream);
+    color: var(--black);
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 18px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+main {
+    flex: 1;
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 24px var(--gap);
+    text-align: center;
+}
+
+h1 {
+    margin: 0 0 20px;
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--red);
+}
+
+/* узор в шапке и подвале */ 
+header, footer {
+    height: 28px;
+    flex-shrink: 0;
+    background-color: var(--red);
+    background-image:
+        radial-gradient(circle, var(--red) 3px, transparent 3.5px),
+        linear-gradient(45deg, transparent 37%, var(--black) 37%, var(--black) 63%, transparent 63%),
+        linear-gradient(-45deg, transparent 37%, var(--black) 37%, var(--black) 63%, transparent 63%);
+    background-size: 28px 28px;
+    background-position: center;
+}
+
+footer { height: 20px; background-size: 20px 20px; }
+nav:empty { display: none; }
+
+/* кнопки */
+button {
+    min-height: var(--tap);
+    padding: 0 22px;
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--red);
+    color: var(--white);
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: transform .08s;
+}
+
+button:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(29, 29, 27, 0.13); }
+button:disabled { opacity: .35; cursor: default; transform: none; }
+
+/* приветствие "Чырткем!" */
+main > p:first-child {
+    margin: 8px 0 24px;
+    font-size: 40px;
+    font-weight: 800;
+    color: var(--red);
+}
+
+main > h1 + p { font-size: 22px; color: var(--muted); font-weight: 400; }
+
+/* 4 раздела */
+main > a {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: calc(50% - 10px);
+    min-height: 140px;
+    margin-bottom: 16px;
+    border-radius: var(--radius);
+    background: var(--white);
+    box-shadow: var(--shadow);
+    color: var(--black);
+    font-weight: 800;
+    text-decoration: none;
+    vertical-align: top;
+}
+
+main > a:nth-of-type(odd) { margin-right: 8px; }
+main > a:active { transform: translateY(3px); }
+
+/* иконки разделов */
+main > a::before { font-size: 52px; line-height: 1; }
+main > a:nth-of-type(1)::before { content: "📚"; }
+main > a:nth-of-type(2)::before { content: "🎲"; }
+main > a:nth-of-type(3)::before { content: "🙂"; }
+main > a:nth-of-type(4)::before { content: "⚙️"; }
+
+/* выделение 1 раздела красным */
+main > a:nth-of-type(1) { background: var(--red); color: var(--white); }
+
+
+/* выбор темы */
+#start-screen > p { color: var(--muted); margin: 0 0 16px; }
+
+#buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+#buttons button {
+    min-height: 88px;
+    padding: 12px;
+    background: var(--white);
+    color: var(--black);
+    border-left: 8px solid var(--red);
+    line-height: 1.2;
+}
+
+/* темы, оформленные с черной полоской */
+#buttons button:nth-child(3n + 2) { border-left-color: var(--black); }
+
+#to-main { background: transparent; color: var(--muted); box-shadow: none; font-weight: 400; text-decoration: underline; }
+
+/* экран карточки слова */
+#education-screen {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+/* карточка слова с описанием, произношением */
+#word, #pronunciation, #translation, #count { grid-column: 1 / -1; margin: 0; }
+
+#word {
+    margin-top: 8px;
+    padding: 48px 16px 8px;
+    border-radius: var(--radius) var(--radius) 0 0;
+    background: var(--white);
+    color: var(--red);
+    font-size: 44px;
+    font-weight: 800;
+    word-break: break-word;
+}
+
+#pronunciation {
+    margin-top: -12px;
+    padding: 0 16px;
+    background: var(--white);
+    color: var(--muted);
+    font-style: italic;
+}
+
+#pronunciation:empty { padding: 0; }
+
+#translation {
+    margin-top: -12px;
+    padding: 16px 16px 40px;
+    border-radius: 0 0 var(--radius) var(--radius);
+    background: var(--white);
+    box-shadow: var(--shadow);
+    font-size: 26px;
+    border-top: 2px dashed var(--line);
+}
+
+#count { color: var(--muted); font-weight: 800; padding: 8px 0; }
+
+#back { background: var(--white); color: var(--black); }
+#to-list { grid-column: 1 / -1; background: var(--black); }
+
+/* под планшет */
+@media (min-width: 720px) {
+    body { font-size: 20px; }
+    #buttons { grid-template-columns: repeat(3, 1fr); }
+    main > a { min-height: 180px; }
+    #word { font-size: 56px; }
+}
