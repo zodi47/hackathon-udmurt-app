@@ -1,4 +1,4 @@
-import {shuffle, showScreen} from "../utils.js";
+import {shuffle, showScreen, replayAnimation} from "../utils.js";
 
 const gameScreenBox = document.getElementById("game-screen"); // экран вопроса
 const closeButton = document.getElementById("close-btn");
@@ -68,6 +68,7 @@ function showQuestion() {
 
     wordText.textContent = currentWord.word;
     countText.textContent = `${index + 1}/${questions.length}`;
+    replayAnimation(wordText);
 
     if (index == questions.length - 1) {
         nextButton.textContent = "Результат";

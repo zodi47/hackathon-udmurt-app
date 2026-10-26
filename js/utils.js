@@ -13,3 +13,10 @@ export function showScreen(item) {
     }
     item.hidden = false;
 }
+
+//перезапуск css-анимации появления (сама анимация .appear описана в style.css)
+export function replayAnimation(item) {
+    item.classList.remove("appear");
+    void item.offsetWidth; // заставляет браузер "заметить" снятие класса
+    item.classList.add("appear");
+}

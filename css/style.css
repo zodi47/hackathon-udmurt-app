@@ -15,11 +15,23 @@
     --white: #ffffff;
     --muted: #7a6f63;
     --line: #eadfce;
+    --green: #2e9e4f;
 
     --radius: 22px;
     --gap: 16px;
-    --tap: 56px;
+    --tap: 68px;
     --shadow: 0 5px 0 rgba(29, 29, 27, 0.13);
+
+    --spring: cubic-bezier(.34, 1.56, .64, 1);
+    --pop: .4s var(--spring);
+    --fade: .3s ease-out;
+    --step: .06s;
+
+    /* узоры ромбиками */
+    --ornament:
+        radial-gradient(circle, var(--red) 3px, transparent 3.5px),
+        linear-gradient(45deg, transparent 37%, var(--black) 37%, var(--black) 63%, transparent 63%),
+        linear-gradient(-45deg, transparent 37%, var(--black) 37%, var(--black) 63%, transparent 63%);
 }
 
 * { box-sizing: border-box; }
@@ -30,6 +42,7 @@ html, body { margin: 0; }
 
 body {
     min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     background: var(--cream);
@@ -55,38 +68,52 @@ h1 {
     color: var(--red);
 }
 
-/* узор в шапке и подвале */ 
+/* закрепление узоров в шапке и подвале */
 header, footer {
+    position: -webkit-sticky;
+    position: sticky;
+    z-index: 10;
     height: 28px;
     flex-shrink: 0;
     background-color: var(--red);
-    background-image:
-        radial-gradient(circle, var(--red) 3px, transparent 3.5px),
-        linear-gradient(45deg, transparent 37%, var(--black) 37%, var(--black) 63%, transparent 63%),
-        linear-gradient(-45deg, transparent 37%, var(--black) 37%, var(--black) 63%, transparent 63%);
+    background-image: var(--ornament);
     background-size: 28px 28px;
     background-position: center;
 }
 
-footer { height: 20px; background-size: 20px 20px; }
+header { top: 0; }
+footer { bottom: 0; height: 20px; background-size: 20px 20px; }
 nav:empty { display: none; }
 
 /* кнопки */
 button {
     min-height: var(--tap);
-    padding: 0 22px;
+    padding: 8px 24px;
     border: 0;
     border-radius: var(--radius);
     background: var(--red);
     color: var(--white);
     font: inherit;
+    font-size: 20px;
     font-weight: 800;
     cursor: pointer;
     box-shadow: var(--shadow);
-    transition: transform .08s;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
-button:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(29, 29, 27, 0.13); }
+/* анимации кнопок */
+button, main > a {
+    transition: transform .35s var(--spring), box-shadow .35s var(--spring);
+}
+
+button:active, main > a:active {
+    transform: translateY(5px) scale(.95);
+    box-shadow: 0 0 0 rgba(29, 29, 27, 0);
+    transition-duration: .05s;
+}
+
 button:disabled { opacity: .35; cursor: default; transform: none; }
 
 /* приветствие "Чырткем!" */
@@ -107,7 +134,7 @@ main > a {
     justify-content: center;
     gap: 8px;
     width: calc(50% - 10px);
-    min-height: 140px;
+    min-height: 160px;
     margin-bottom: 16px;
     border-radius: var(--radius);
     background: var(--white);
@@ -119,7 +146,7 @@ main > a {
 }
 
 main > a:nth-of-type(odd) { margin-right: 8px; }
-main > a:active { transform: translateY(3px); }
+main > a { -webkit-user-select: none; user-select: none; }
 
 /* иконки разделов */
 main > a::before { font-size: 52px; line-height: 1; }
@@ -143,7 +170,7 @@ main > a:nth-of-type(1) { background: var(--red); color: var(--white); }
 }
 
 #buttons button {
-    min-height: 88px;
+    min-height: 100px;
     padding: 12px;
     background: var(--white);
     color: var(--black);
@@ -154,7 +181,12 @@ main > a:nth-of-type(1) { background: var(--red); color: var(--white); }
 /* темы, оформленные с черной полоской */
 #buttons button:nth-child(3n + 2) { border-left-color: var(--black); }
 
-#to-main { background: transparent; color: var(--muted); box-shadow: none; font-weight: 400; text-decoration: underline; }
+/* кнопки "на главную" и "назад" */
+#to-main, #to-start-screen {
+    width: 100%;
+    background: var(--white);
+    color: var(--black);
+}
 
 /* экран карточки слова */
 #education-screen {
@@ -172,8 +204,10 @@ main > a:nth-of-type(1) { background: var(--red); color: var(--white); }
     border-radius: var(--radius) var(--radius) 0 0;
     background: var(--white);
     color: var(--red);
-    font-size: 44px;
+    font-size: 40px;
+    font-size: clamp(30px, 11vw, 44px);
     font-weight: 800;
+    line-height: 1.15;
     word-break: break-word;
 }
 
@@ -197,15 +231,405 @@ main > a:nth-of-type(1) { background: var(--red); color: var(--white); }
     border-top: 2px dashed var(--line);
 }
 
+/* полоска орнамента снизу карточки */
+#translation, #game-screen #word { position: relative; overflow: hidden; }
+
+#translation::after, #game-screen #word::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 14px;
+    background-color: var(--red);
+    background-image: var(--ornament);
+    background-size: 14px 14px;
+}
+
 #count { color: var(--muted); font-weight: 800; padding: 8px 0; }
 
 #back { background: var(--white); color: var(--black); }
 #to-list { grid-column: 1 / -1; background: var(--black); }
 
+
+/* ИГРЫ */
+
+/* список игр */
+#start-screen > div:not([id]) {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+#start-screen > div:not([id]) button { min-height: 100px; }
+
+#select-screen > p { color: var(--muted); margin: 0 0 16px; }
+
+/* экран вопроса: крестик и счетчик сверху, ниже задание, слово, варианты */
+#game-screen {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+        "close   count"
+        "prompt  prompt"
+        "word    word"
+        "options options"
+        "next    next";
+    align-items: center;
+    gap: 12px;
+}
+
+#close-btn {
+    grid-area: close;
+    width: 60px;
+    min-height: 60px;
+    padding: 0;
+    border-radius: 50%;
+    background: var(--white);
+    color: var(--black);
+    font-size: 24px;
+}
+
+#game-screen #count { grid-area: count; justify-self: end; padding: 0 8px; }
+
+#game-screen > p:first-of-type { grid-area: prompt; margin: 4px 0 0; color: var(--muted); }
+
+/* карточка слова в игре — целиком, со скруглением и орнаментом снизу */
+#game-screen #word {
+    grid-area: word;
+    margin: 0;
+    padding: 36px 16px 50px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+/* варианты ответа 2х2 */
+#options {
+    grid-area: options;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.option {
+    min-height: 96px;
+    padding: 8px 12px;
+    background: var(--white);
+    color: var(--black);
+    line-height: 1.2;
+    overflow-wrap: break-word;   /* переносит только если слово совсем не влезает */
+}
+
+.option.correct { background: var(--green); color: var(--white); }
+.option.wrong   { background: var(--red);   color: var(--white); }
+
+#game-screen #next { grid-area: next; }
+
+/* экран результата */
+#end-game-screen {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 24px;
+}
+
+#result-text { margin: 0; font-size: 40px; font-size: clamp(28px, 10vw, 40px); font-weight: 800; color: var(--red); }
+#result-score { margin: 0 0 16px; font-size: 20px; color: var(--muted); }
+#to-themes { background: var(--white); color: var(--black); }
+
+/* дефолтные телефоны */
+@media (max-width: 389px) {
+    .option { padding: 8px 6px; font-size: 18px; }
+}
+
+/* узкие телефоны */
+@media (max-width: 359px) {
+    body { font-size: 16px; }
+    main { padding: 16px 12px; }
+    button { font-size: 18px; padding: 8px 16px; }
+    main > a { min-height: 136px; }
+    main > a::before { font-size: 44px; }
+    #buttons button { min-height: 88px; }
+    .option { min-height: 84px; }
+}
+
 /* под планшет */
 @media (min-width: 720px) {
     body { font-size: 20px; }
     #buttons { grid-template-columns: repeat(3, 1fr); }
-    main > a { min-height: 180px; }
+    button { font-size: 22px; }
+    main > a { min-height: 190px; }
     #word { font-size: 56px; }
+    .option { min-height: 110px; }
+}
+
+/* невысокие экраны */
+@media (max-height: 720px) {
+    main { padding-top: 12px; }
+    h1 { font-size: 24px; margin-bottom: 10px; }
+    main > p:first-child { font-size: 32px; margin: 0 0 12px; }
+    main > a { min-height: 128px; margin-bottom: 12px; }
+    #buttons button { min-height: 84px; }
+
+    #word { padding-top: 28px; }
+    #translation { padding-bottom: 32px; }
+
+    #game-screen { gap: 8px; }
+    #close-btn { width: 52px; min-height: 52px; }
+    #game-screen #word { padding: 18px 16px 34px; }
+    #game-screen > p:first-of-type { margin: 0; }
+    .option { min-height: 76px; }
+}
+
+
+/* сильно низкие экраны */
+@media (max-height: 600px) {
+    :root { --tap: 60px; }
+    main { padding-top: 8px; }
+    h1 { font-size: 20px; margin-bottom: 4px; }
+    #game-screen { gap: 6px; }
+    #close-btn { width: 48px; min-height: 48px; font-size: 20px; }
+    #game-screen #word { padding: 10px 16px 28px; font-size: 30px; }
+    .option { min-height: 62px; }
+}
+
+#to-main, #to-start-screen {
+    position: -webkit-sticky;
+    position: sticky;
+    bottom: 28px;
+    z-index: 7;
+}
+
+
+@supports (animation-timeline: scroll()) {
+
+    /* затухание контента */
+    body::before {
+        content: "";
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 20px;
+        z-index: 5;
+        max-width: 640px;
+        height: calc(var(--tap) + 72px);
+        margin: 0 auto;
+        background: linear-gradient(rgba(255, 248, 238, 0), var(--cream) 56px);
+        pointer-events: none;
+        opacity: 0;
+        animation: hint-fade linear both;
+        animation-duration: auto;
+        animation-timeline: scroll(root);
+    }
+
+    /* стрелка вниз над кнопкой "назад" */
+    body::after {
+        content: "↓";
+        position: fixed;
+        left: 50%;
+        bottom: calc(20px + var(--tap) + 22px);
+        z-index: 6;
+        width: 44px;
+        height: 44px;
+        margin-left: -22px;
+        border-radius: 50%;
+        background: var(--red);
+        color: var(--white);
+        font-size: 24px;
+        font-weight: 800;
+        line-height: 44px;
+        text-align: center;
+        box-shadow: var(--shadow);
+        pointer-events: none;
+        opacity: 0;
+        animation: hint-bounce 1.2s ease-in-out infinite, hint-fade linear both;
+        animation-duration: 1.2s, auto;
+        animation-timeline: auto, scroll(root);
+    }
+}
+
+
+
+@keyframes pop {
+    from { opacity: 0; transform: scale(.6); }
+}
+
+@keyframes fade-up {
+    from { opacity: 0; transform: translateY(12px); }
+}
+
+@keyframes fade {
+    from { opacity: 0; }
+}
+
+/* карточка не меняется, только слово */
+@keyframes text-in {
+    from { color: transparent; }
+}
+
+/* верный ответ пружинит */
+@keyframes jelly {
+    0%, 100% { transform: none; }
+    30%      { transform: scale(1.15, .85); }
+    45%      { transform: scale(.9, 1.1); }
+    60%      { transform: scale(1.05, .95); }
+    75%      { transform: scale(.98, 1.02); }
+}
+
+/* галочка на верном ответе */
+@keyframes badge-in {
+    0%   { opacity: 0; transform: scale(0) rotate(-180deg); }
+    70%  { opacity: 1; transform: scale(1.3) rotate(15deg); }
+    100% { opacity: 1; transform: none; }
+}
+
+/* неверный ответ, покачивается по горизонтали */
+@keyframes shake {
+    0%, 100% { transform: none; }
+    25%      { transform: translateX(-8px); }
+    50%      { transform: translateX(6px); }
+    75%      { transform: translateX(-3px); }
+}
+
+/* неверный ответ краснеет с задержкой */
+@keyframes wrong-in {
+    from { background: var(--white); color: var(--black); }
+}
+
+/* ромбики на экране результата */
+@keyframes fall {
+    0%   { opacity: 1; transform: translateY(-100%); }
+    85%  { opacity: 1; }
+    100% { opacity: 0; transform: translateY(100vh); }
+}
+
+@keyframes hint-fade {
+    0%, 55% { opacity: 1; }
+    100%    { opacity: 0; }
+}
+
+/* стрелка подсказки прыгает вниз-вверх */
+@keyframes hint-bounce {
+    0%, 100% { transform: none; }
+    50%      { transform: translateY(6px); }
+}
+
+@keyframes sway {
+    0%, 100% { margin-left: -12px; }
+    50%      { margin-left: 12px; }
+}
+
+
+/* главная - "Чырткем!" и плитки */
+main > p:first-child { animation: pop var(--pop) backwards; }
+
+main > a { animation: pop var(--pop) backwards; }
+main > a:nth-of-type(1) { animation-delay: calc(var(--step) * 2); }
+main > a:nth-of-type(2) { animation-delay: calc(var(--step) * 3); }
+main > a:nth-of-type(3) { animation-delay: calc(var(--step) * 4); }
+main > a:nth-of-type(4) { animation-delay: calc(var(--step) * 5); }
+
+/* фейд на каждом экране */
+h1 { animation: fade-up var(--fade) backwards; }
+main > section:not([hidden]) { animation: fade-up var(--fade) backwards; }
+
+#start-screen:not([hidden]), #select-screen:not([hidden]) { animation: none; }
+#start-screen > p, #select-screen > p { animation: fade-up var(--fade) backwards; }
+#to-main, #to-start-screen { animation: pop var(--pop) backwards; animation-delay: calc(var(--step) * 3); }
+
+/* кнопки тем и игр прыгают по очереди */
+#buttons button,
+#start-screen > div:not([id]) button { animation: pop var(--pop) backwards; }
+
+#buttons button:nth-child(1) { animation-delay: calc(var(--step) * 1); }
+#buttons button:nth-child(2) { animation-delay: calc(var(--step) * 2); }
+#buttons button:nth-child(3) { animation-delay: calc(var(--step) * 3); }
+#buttons button:nth-child(4) { animation-delay: calc(var(--step) * 4); }
+#buttons button:nth-child(5) { animation-delay: calc(var(--step) * 5); }
+#buttons button:nth-child(6) { animation-delay: calc(var(--step) * 6); }
+#buttons button:nth-child(7) { animation-delay: calc(var(--step) * 7); }
+#buttons button:nth-child(n + 8) { animation-delay: calc(var(--step) * 8); }
+
+/* смена слова */
+.appear { animation: text-in var(--fade) backwards; }
+
+/* варианты ответа прыгают по очереди */
+.option { animation: pop var(--pop) backwards; }
+.option:nth-child(1) { animation-delay: calc(var(--step) * 2); }
+.option:nth-child(2) { animation-delay: calc(var(--step) * 3); }
+.option:nth-child(3) { animation-delay: calc(var(--step) * 4); }
+.option:nth-child(n + 4) { animation-delay: calc(var(--step) * 5); }
+
+/* верный ответ сразу, без задержки появления */
+.correct, .option.correct { position: relative; overflow: visible; animation: jelly .6s ease-out; }
+
+.correct::after {
+    content: "✓";
+    position: absolute;
+    top: -10px;
+    right: -6px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--white);
+    color: var(--green);
+    font-size: 20px;
+    line-height: 34px;
+    box-shadow: 0 3px 0 rgba(29, 29, 27, 0.15);
+    animation: badge-in .5s .15s cubic-bezier(.34, 1.56, .64, 1) backwards;
+}
+
+/* неверный ответ после верного */
+.wrong, .option.wrong { animation: wrong-in .2s .6s backwards, shake .4s .6s ease-in-out; }
+
+.correct:disabled, .wrong:disabled { opacity: 1; }
+
+#game-screen #next:not([hidden]) { animation: pop var(--pop) backwards; }
+
+#result-text  { animation: pop var(--pop) backwards; animation-delay: calc(var(--step) * 2); }
+#result-score { animation: fade-up var(--fade) backwards; animation-delay: calc(var(--step) * 5); }
+#end-game-screen button { animation: pop var(--pop) backwards; }
+#play-again { animation-delay: calc(var(--step) * 7); }
+#to-themes  { animation-delay: calc(var(--step) * 8); }
+
+#end-game-screen:not([hidden]) { animation: fade var(--fade) backwards; }
+
+#end-game-screen::before,
+#end-game-screen::after {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    pointer-events: none;
+    white-space: pre;
+    text-align: center;
+    word-spacing: 3vw;
+    line-height: 9vh;
+    opacity: 0;
+}
+
+#end-game-screen::before {
+    content: "◆   ◆  ◆     ◆ ◆   ◆\A  ◆     ◆   ◆  ◆     ◆\A◆  ◆      ◆    ◆  ◆\A    ◆  ◆   ◆      ◆  ◆\A ◆      ◆  ◆   ◆    ◆\A   ◆   ◆     ◆  ◆   ◆";
+    color: var(--red);
+    font-size: 22px;
+    animation: fall 2.6s .1s ease-in, sway 1.3s ease-in-out 2;
+}
+
+#end-game-screen::after {
+    content: "  ◆    ◆   ◆  ◆      ◆\A◆   ◆      ◆   ◆  ◆\A    ◆  ◆    ◆     ◆  ◆\A ◆     ◆  ◆   ◆     ◆\A   ◆  ◆      ◆  ◆   ◆";
+    color: var(--black);
+    font-size: 14px;
+    animation: fall 3.2s .4s ease-in, sway 1.6s .4s ease-in-out 2;
+}
+
+
+/* если в системе отключены анимации */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-delay: 0s !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+    }
 }
