@@ -2,6 +2,8 @@
 import {loadJson} from "./loader.js";
 import {showScreen} from "./utils.js";
 
+import {replayAnimation} from "./utils.js";
+
 
 
 const startScreenBox = document.getElementById("start-screen");
@@ -51,6 +53,10 @@ function showCard(){
     pronunciationText.textContent = theme.words[index].pronunciation;
     translationText.textContent = theme.words[index].translation;
     countText.textContent = `${index+1}/${theme.words.length}`;
+
+    replayAnimation(wordText);
+    replayAnimation(pronunciationText);
+    replayAnimation(translationText);
 
     showScreen(educationScreenBox);
 }

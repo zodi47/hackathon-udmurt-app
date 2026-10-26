@@ -1,5 +1,4 @@
 import {shuffle, showScreen} from "../utils.js";
-import {saveGameResult} from "../progress.js";
 
 const gameScreenBox = document.getElementById("game-translate-screen"); // экран вопроса
 const closeButton = document.getElementById("translate-close");
@@ -69,6 +68,7 @@ function showQuestion() {
 
     wordText.textContent = currentWord.word;
     countText.textContent = `${index + 1}/${questions.length}`;
+    replayAnimation(wordText);
 
     if (index == questions.length - 1) {
         nextButton.textContent = "Результат";
