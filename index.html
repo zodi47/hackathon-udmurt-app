@@ -8,23 +8,49 @@
 </head>
 <body>
     <header>
-        
+
     </header>
     <nav>
 
     </nav>
     <main>
-        
+
         <p>Чырткем!</p>
         <h1>Ӟеч-а бур-а удмурт кыл?</h1>
-        <a href="html/education.html">Обучение</a>
-        <a href="html/games.html">Игры</a>
-        <a href="html/profile.html">Профиль</a>
-        <a href="html/settings.html">Настройки</a>
+        <a href="html/education.html" hidden>Обучение</a>
+        <a href="html/games.html" hidden>Игры</a>
+        <a href="html/profile.html" hidden>Профиль</a>
+        <a href="html/settings.html" hidden>Настройки</a>
+
+        <section id="auth-screen">
+            <button id="open-register">Регистрация</button>
+            <button id="open-login">Вход</button>
+        </section>
+
+        <section id="register-screen" hidden>
+            <p>Регистрация</p>
+            <input id="register-name" type="text" placeholder="Имя пользователя">
+            <input id="register-password" type="password" placeholder="Пароль">
+            <p id="register-error"></p>
+            <button id="register-button">Зарегистрироваться</button>
+            <button id="register-back">Назад</button>
+        </section>
+
+        <section id="login-screen" hidden>
+            <p>Вход</p>
+            <input id="login-name" type="text" placeholder="Имя пользователя">
+            <input id="login-password" type="password" placeholder="Пароль">
+            <p id="login-error"></p>
+            <button id="login-button">Войти</button>
+            <button id="login-back">Назад</button>
+        </section>
 
     </main>
     <footer>
-        
+
     </footer>
+
+    <script src="lib/sql-wasm.js"></script>
+    <script type="module" src="js/auth.js"></script>
 </body>
 </html>

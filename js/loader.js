@@ -1,3 +1,4 @@
+//загрузка слов из json
 export async function loadJson() {
     const response = await fetch("../data/words.json");
     if (response.ok) {

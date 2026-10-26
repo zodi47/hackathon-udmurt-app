@@ -19,7 +19,9 @@
         <section id="start-screen">
             <p>Выберите игру для повторения:</p>
             <div>
-                <button id="select-translate">Выбери перевод</button>
+                <button id="select-translate">Выбери перевод <span id="progress-translate"></span></button>
+                <button id="select-wrong">Найди лишнее слово <span id="progress-wrong"></span></button>
+                <button id="select-build-word">Собери слово <span id="progress-build-word"></span></button>
             </div>
             <button id="to-main">На главную</button>
         </section>
@@ -30,20 +32,54 @@
             <button id="to-start-screen">Назад</button>
         </section>
 
-        <section id="game-screen" hidden>
-            <button id="close-btn">✕</button>
+        <section id="game-translate-screen" hidden>
+            <button id="translate-close">✕</button>
             <p>Переведите на русский</p>
-            <p id="word"></p>
-            <p id="count"></p>
-            <div id="options"></div>
-            <button id="next" hidden>Далее</button>
+            <p id="translate-word"></p>
+            <p id="translate-count"></p>
+            <div id="translate-options"></div>
+            <button id="translate-next" hidden>Далее</button>
         </section>
 
-        <section id="end-game-screen" hidden>
-            <p id="result-text"></p>
-            <p id="result-score"></p>
-            <button id="play-again">Играть ещё</button>
-            <button id="to-themes">К списку тем</button>
+        <section id="game-wrong-screen" hidden>
+            <button id="wrong-close">✕</button>
+            <p>Выберите лишнее слово из списка</p>
+            <p id="wrong-words"></p>
+            <p id="wrong-count"></p>
+            <div id="wrong-options"></div>
+            <button id="wrong-next" hidden>Далее</button>
+        </section> 
+
+        <section id="game-build-word-screen" hidden>
+            <button id="build-word-close">✕</button>
+            <p>Составьте слово из букв</p>
+            <p id="build-word-text"></p>
+            <p id="build-word-count"></p>
+            <p id="build-word-answer"></p>
+            <div id="build-word-options"></div>
+            <button id="build-word-reset">Заново</button>
+            <button id="build-word-next" hidden>Далее</button>
+        </section>
+
+        <section id="translate-end-screen" hidden>
+            <p id="translate-result-text"></p>
+            <p id="translate-result-score"></p>
+            <button id="translate-play-again">Играть ещё</button>
+            <button id="translate-to-themes">К списку тем</button>
+        </section>
+
+        <section id="wrong-end-screen" hidden>
+            <p id="wrong-result-text"></p>
+            <p id="wrong-result-score"></p>
+            <button id="wrong-play-again">Играть ещё</button>
+            <button id="wrong-to-themes">К списку тем</button>
+        </section>
+
+        <section id="build-word-end-screen" hidden>
+            <p id="build-word-result-text"></p>
+            <p id="build-word-result-score"></p>
+            <button id="build-word-play-again">Играть ещё</button>
+            <button id="build-word-to-themes">К списку тем</button>
         </section>
 
     </main>
@@ -51,6 +87,7 @@
         
     </footer>
 
+    <script src="../lib/sql-wasm.js"></script>
     <script type="module" src="../js/games.js"></script>
 </body>
 </html>
