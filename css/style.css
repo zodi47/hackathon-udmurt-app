@@ -232,9 +232,9 @@ main > a:nth-of-type(1) { background: var(--red); color: var(--white); }
 }
 
 /* полоска орнамента снизу карточки */
-#translation, #game-screen #word { position: relative; overflow: hidden; }
+#translation, #translate-word, #build-word-text { position: relative; overflow: hidden; }
 
-#translation::after, #game-screen #word::after {
+#translation::after, #translate-word::after, #build-word-text::after {
     content: "";
     position: absolute;
     left: 0;
@@ -263,23 +263,49 @@ main > a:nth-of-type(1) { background: var(--red); color: var(--white); }
 
 #start-screen > div:not([id]) button { min-height: 100px; }
 
+/* прогресс игры под названием */
+#start-screen > div:not([id]) button span { display: block; font-size: 16px; font-weight: 400; }
+#start-screen > div:not([id]) button span:empty { display: none; }
+
 #select-screen > p { color: var(--muted); margin: 0 0 16px; }
 
-/* экран вопроса: крестик и счетчик сверху, ниже задание, слово, варианты */
-#game-screen {
+/* экраны игр: крестик и счетчик сверху, ниже задание, слово, варианты */
+section[id^="game-"] {
     display: grid;
     grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 12px;
+}
+
+#game-translate-screen {
     grid-template-areas:
         "close   count"
         "prompt  prompt"
         "word    word"
         "options options"
         "next    next";
-    align-items: center;
-    gap: 12px;
 }
 
-#close-btn {
+#game-wrong-screen {
+    grid-template-areas:
+        "close   count"
+        "prompt  prompt"
+        "options options"
+        "word    word"
+        "next    next";
+}
+
+#game-build-word-screen {
+    grid-template-areas:
+        "close   count"
+        "prompt  prompt"
+        "word    word"
+        "answer  answer"
+        "options options"
+        "next    next";
+}
+
+[id$="-close"] {
     grid-area: close;
     width: 60px;
     min-height: 60px;
@@ -290,21 +316,40 @@ main > a:nth-of-type(1) { background: var(--red); color: var(--white); }
     font-size: 24px;
 }
 
-#game-screen #count { grid-area: count; justify-self: end; padding: 0 8px; }
+section[id^="game-"] [id$="-count"] { grid-area: count; justify-self: end; margin: 0; padding: 0 8px; color: var(--muted); font-weight: 800; }
 
-#game-screen > p:first-of-type { grid-area: prompt; margin: 4px 0 0; color: var(--muted); }
+section[id^="game-"] > p:first-of-type { grid-area: prompt; margin: 4px 0 0; color: var(--muted); }
 
-/* карточка слова в игре — целиком, со скруглением и орнаментом снизу */
-#game-screen #word {
+/* карточка слова в игре */
+#translate-word, #build-word-text {
     grid-area: word;
     margin: 0;
     padding: 36px 16px 50px;
     border-radius: var(--radius);
+    background: var(--white);
     box-shadow: var(--shadow);
+    color: var(--red);
+    font-size: 40px;
+    font-size: clamp(30px, 11vw, 44px);
+    font-weight: 800;
+    line-height: 1.15;
+    word-break: break-word;
 }
 
+/* лишнее слово появляется после ответа */
+#wrong-words {
+    grid-area: word;
+    margin: 0;
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    background: var(--white);
+    font-weight: 800;
+}
+
+#wrong-words:empty { display: none; }
+
 /* варианты ответа 2х2 */
-#options {
+[id$="-options"] {
     grid-area: options;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -323,19 +368,181 @@ main > a:nth-of-type(1) { background: var(--red); color: var(--white); }
 .option.correct { background: var(--green); color: var(--white); }
 .option.wrong   { background: var(--red);   color: var(--white); }
 
-#game-screen #next { grid-area: next; }
+/* собери слово: буквы плитками */
+#build-word-options { grid-template-columns: repeat(auto-fit, minmax(56px, 1fr)); }
 
-/* экран результата */
-#end-game-screen {
+.chars {
+    min-height: 64px;
+    padding: 0;
+    background: var(--white);
+    color: var(--black);
+    font-size: 28px;
+}
+
+/* собранное слово */
+#build-word-answer {
+    grid-area: answer;
+    min-height: var(--tap);
+    margin: 0;
+    padding: 12px 16px;
+    border: 2px dashed var(--line);
+    border-radius: var(--radius);
+    background: var(--white);
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+#build-word-answer.correct { border-color: var(--green); background: var(--green); color: var(--white); }
+#build-word-answer.wrong   { border-color: var(--red);   background: var(--red);   color: var(--white); }
+
+/* "заново" и "далее" на одном месте, видна одна из них */
+section[id^="game-"] [id$="-next"], #build-word-reset { grid-area: next; }
+#build-word-reset { background: var(--white); color: var(--black); }
+
+/* экраны результата */
+section[id$="-end-screen"] {
     display: flex;
     flex-direction: column;
     gap: 12px;
     padding-top: 24px;
 }
 
-#result-text { margin: 0; font-size: 40px; font-size: clamp(28px, 10vw, 40px); font-weight: 800; color: var(--red); }
-#result-score { margin: 0 0 16px; font-size: 20px; color: var(--muted); }
-#to-themes { background: var(--white); color: var(--black); }
+[id$="-result-text"] { margin: 0; font-size: 40px; font-size: clamp(28px, 10vw, 40px); font-weight: 800; color: var(--red); }
+[id$="-result-score"] { margin: 0 0 16px; font-size: 20px; color: var(--muted); }
+[id$="-to-themes"] { background: var(--white); color: var(--black); }
+
+
+/* ВХОД, ПРОФИЛЬ, НАСТРОЙКИ */
+
+#auth-screen, #register-screen, #login-screen,
+#profile-screen, #password-screen, #settings-screen {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* заголовок формы */
+#register-screen > p:first-child, #login-screen > p:first-child, #password-screen > p:first-child {
+    margin: 0 0 4px;
+    font-size: 24px;
+    font-weight: 800;
+}
+
+/* поля ввода */
+input[type="text"], input[type="password"] {
+    width: 100%;
+    min-height: var(--tap);
+    padding: 0 20px;
+    border: 2px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--white);
+    color: var(--black);
+    font: inherit;
+    font-size: 20px;
+}
+
+input[type="text"]:focus, input[type="password"]:focus { outline: none; border-color: var(--red); }
+
+/* ошибки и сообщения */
+#register-error, #login-error, #password-message { margin: 0; color: var(--red); font-size: 18px; }
+#register-error:empty, #login-error:empty, #password-message:empty { display: none; }
+
+/* второстепенные кнопки белые */
+#open-login, #register-back, #login-back, #password-back, #open-change-password {
+    background: var(--white);
+    color: var(--black);
+}
+
+/* имя пользователя в профиле */
+#profile-screen > p {
+    margin: 0;
+    padding: 20px;
+    border-radius: var(--radius);
+    background: var(--white);
+    box-shadow: var(--shadow);
+    font-size: 20px;
+}
+
+#profile-name { color: var(--red); font-weight: 800; }
+
+/* настройки: строка с переключателем */
+#settings-screen > div { display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px; }
+
+#settings-screen label {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+    min-height: var(--tap);
+    padding: 0 20px;
+    border-radius: var(--radius);
+    background: var(--white);
+    box-shadow: var(--shadow);
+    font-weight: 800;
+    cursor: pointer;
+}
+
+/* переключатель вместо галочки */
+input[role="switch"] {
+    -webkit-appearance: none;
+    appearance: none;
+    position: relative;
+    flex-shrink: 0;
+    width: 56px;
+    height: 32px;
+    margin: 0;
+    border-radius: 16px;
+    background: var(--line);
+    cursor: pointer;
+    transition: background .2s;
+}
+
+input[role="switch"]::before {
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--white);
+    box-shadow: 0 2px 0 rgba(29, 29, 27, 0.15);
+    transition: transform .35s var(--spring);
+}
+
+input[role="switch"]:checked { background: var(--green); }
+input[role="switch"]:checked::before { transform: translateX(24px); }
+
+/* выход из профиля */
+#logout-button { background: var(--white); color: var(--red); }
+
+/* окно подтверждения выхода, фон вокруг затемнен тенью */
+#logout-confirm {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: var(--gap);
+    right: var(--gap);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+    max-width: 400px;
+    margin: auto;
+    height: -webkit-fit-content;
+    height: fit-content;
+    padding: 24px;
+    border-radius: var(--radius);
+    background: var(--white);
+    box-shadow: 0 0 0 100vmax rgba(29, 29, 27, 0.45);
+    text-align: center;
+    animation: fade var(--fade) backwards;
+}
+
+#logout-confirm p { margin: 0 0 8px; font-size: 24px; font-weight: 800; }
+#logout-no { background: var(--cream); color: var(--black); }
 
 /* дефолтные телефоны */
 @media (max-width: 389px) {
@@ -359,7 +566,7 @@ main > a:nth-of-type(1) { background: var(--red); color: var(--white); }
     #buttons { grid-template-columns: repeat(3, 1fr); }
     button { font-size: 22px; }
     main > a { min-height: 190px; }
-    #word { font-size: 56px; }
+    #word, #translate-word, #build-word-text { font-size: 56px; }
     .option { min-height: 110px; }
 }
 
@@ -374,10 +581,10 @@ main > a:nth-of-type(1) { background: var(--red); color: var(--white); }
     #word { padding-top: 28px; }
     #translation { padding-bottom: 32px; }
 
-    #game-screen { gap: 8px; }
-    #close-btn { width: 52px; min-height: 52px; }
-    #game-screen #word { padding: 18px 16px 34px; }
-    #game-screen > p:first-of-type { margin: 0; }
+    section[id^="game-"] { gap: 8px; }
+    [id$="-close"] { width: 52px; min-height: 52px; }
+    #translate-word, #build-word-text { padding: 18px 16px 34px; }
+    section[id^="game-"] > p:first-of-type { margin: 0; }
     .option { min-height: 76px; }
 }
 
@@ -387,9 +594,10 @@ main > a:nth-of-type(1) { background: var(--red); color: var(--white); }
     :root { --tap: 60px; }
     main { padding-top: 8px; }
     h1 { font-size: 20px; margin-bottom: 4px; }
-    #game-screen { gap: 6px; }
-    #close-btn { width: 48px; min-height: 48px; font-size: 20px; }
-    #game-screen #word { padding: 10px 16px 28px; font-size: 30px; }
+    section[id^="game-"] { gap: 6px; }
+    [id$="-close"] { width: 48px; min-height: 48px; font-size: 20px; }
+    #translate-word, #build-word-text { padding: 10px 16px 28px; font-size: 30px; }
+    .chars { min-height: 56px; }
     .option { min-height: 62px; }
 }
 
@@ -584,18 +792,33 @@ main > section:not([hidden]) { animation: fade-up var(--fade) backwards; }
 
 .correct:disabled, .wrong:disabled { opacity: 1; }
 
-#game-screen #next:not([hidden]) { animation: pop var(--pop) backwards; }
+/* собранное слово: без задержки, верного варианта отдельно нет */
+#build-word-answer.wrong { animation: wrong-in .2s backwards, shake .4s ease-in-out; }
 
-#result-text  { animation: pop var(--pop) backwards; animation-delay: calc(var(--step) * 2); }
-#result-score { animation: fade-up var(--fade) backwards; animation-delay: calc(var(--step) * 5); }
-#end-game-screen button { animation: pop var(--pop) backwards; }
-#play-again { animation-delay: calc(var(--step) * 7); }
-#to-themes  { animation-delay: calc(var(--step) * 8); }
+section[id^="game-"] [id$="-next"]:not([hidden]) { animation: pop var(--pop) backwards; }
 
-#end-game-screen:not([hidden]) { animation: fade var(--fade) backwards; }
+/* буквы прыгают по очереди */
+.chars { animation: pop var(--pop) backwards; }
+.chars:nth-child(2) { animation-delay: calc(var(--step) * 1); }
+.chars:nth-child(3) { animation-delay: calc(var(--step) * 2); }
+.chars:nth-child(4) { animation-delay: calc(var(--step) * 3); }
+.chars:nth-child(n + 5) { animation-delay: calc(var(--step) * 4); }
 
-#end-game-screen::before,
-#end-game-screen::after {
+[id$="-result-text"]  { animation: pop var(--pop) backwards; animation-delay: calc(var(--step) * 2); }
+[id$="-result-score"] { animation: fade-up var(--fade) backwards; animation-delay: calc(var(--step) * 5); }
+section[id$="-end-screen"] button { animation: pop var(--pop) backwards; }
+[id$="-play-again"] { animation-delay: calc(var(--step) * 7); }
+[id$="-to-themes"]  { animation-delay: calc(var(--step) * 8); }
+
+section[id$="-end-screen"]:not([hidden]) { animation: fade var(--fade) backwards; }
+
+/* строки настроек прыгают по очереди */
+#settings-screen label { animation: pop var(--pop) backwards; }
+#settings-screen label:nth-child(2) { animation-delay: calc(var(--step) * 1); }
+#settings-screen label:nth-child(3) { animation-delay: calc(var(--step) * 2); }
+
+section[id$="-end-screen"]::before,
+section[id$="-end-screen"]::after {
     position: fixed;
     top: 0;
     left: 0;
@@ -609,14 +832,14 @@ main > section:not([hidden]) { animation: fade-up var(--fade) backwards; }
     opacity: 0;
 }
 
-#end-game-screen::before {
+section[id$="-end-screen"]::before {
     content: "◆   ◆  ◆     ◆ ◆   ◆\A  ◆     ◆   ◆  ◆     ◆\A◆  ◆      ◆    ◆  ◆\A    ◆  ◆   ◆      ◆  ◆\A ◆      ◆  ◆   ◆    ◆\A   ◆   ◆     ◆  ◆   ◆";
     color: var(--red);
     font-size: 22px;
     animation: fall 2.6s .1s ease-in, sway 1.3s ease-in-out 2;
 }
 
-#end-game-screen::after {
+section[id$="-end-screen"]::after {
     content: "  ◆    ◆   ◆  ◆      ◆\A◆   ◆      ◆   ◆  ◆\A    ◆  ◆    ◆     ◆  ◆\A ◆     ◆  ◆   ◆     ◆\A   ◆  ◆      ◆  ◆   ◆";
     color: var(--black);
     font-size: 14px;

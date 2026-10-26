@@ -12,6 +12,11 @@ function setCurrentUser(name) {
     sessionStorage.setItem("currentUser", name);
 }
 
+//выход из аккаунта
+export function logout() {
+    sessionStorage.removeItem("currentUser");
+}
+
 //проверка пароля
 function checkPassword(password) {
     if (password.length < 8) {

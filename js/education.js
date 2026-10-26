@@ -90,9 +90,7 @@ toListButton.addEventListener("click", () => {
     showScreen(startScreenBox);
 });
 toMainButton.addEventListener("click", () => {
-    if (confirm("Вернуться на главную страницу?") === true) {
-        window.location.href = "../index.html";
-    }
+    window.location.href = "../index.html";
 });
 
 
