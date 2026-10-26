@@ -1,4 +1,5 @@
-import {shuffle, showScreen} from "../utils.js";
+import {shuffle, showScreen, replayAnimation} from "../utils.js";
+import {saveGameResult} from "../progress.js";
 
 const gameScreenBox = document.getElementById("game-translate-screen"); // экран вопроса
 const closeButton = document.getElementById("translate-close");
