@@ -1,5 +1,6 @@
 //ЗАГРУЗКА ДЖСОНА
 import {loadJson} from "./loader.js";
+import {showScreen} from "./utils.js";
 
 
 
@@ -19,8 +20,6 @@ const toListButton = document.getElementById("to-list");
 // счетчики текущего слова и темы
 let index = 0;
 let theme;
-
-const screens = [startScreenBox, educationScreenBox];
 
 //СПАВН КНОПОК
 function addButtons(vocabulary) {
@@ -54,14 +53,6 @@ function showCard(){
     countText.textContent = `${index+1}/${theme.words.length}`;
 
     showScreen(educationScreenBox);
-}
-
-//показ экрана
-function showScreen(item) {
-    for (const screen of screens) {
-        screen.hidden = true;
-    }
-    item.hidden = false;
 }
 
 

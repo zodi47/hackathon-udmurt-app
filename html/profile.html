@@ -3,9 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Профиль</title>
 </head>
 <body>
-    
+    <header>
+
+    </header>
+    <nav>
+
+    </nav>
+    <main>
+        <h1>Профиль</h1>
+
+        <section id="profile-screen">
+            <p>Имя пользователя: <span id="profile-name"></span></p>
+            <button id="open-change-password">Изменить пароль</button>
+            <button id="to-main">На главную</button>
+        </section>
+
+        <section id="password-screen" hidden>
+            <p>Изменение пароля</p>
+            <input id="old-password" type="password" placeholder="Старый пароль">
+            <input id="new-password" type="password" placeholder="Новый пароль">
+            <p id="password-message"></p>
+            <button id="save-password">Сохранить</button>
+            <button id="password-back">Назад</button>
+        </section>
+
+    </main>
+    <footer>
+
+    </footer>
+
+    <script src="../lib/sql-wasm.js"></script>
+    <script type="module" src="../js/profile.js"></script>
 </body>
 </html>

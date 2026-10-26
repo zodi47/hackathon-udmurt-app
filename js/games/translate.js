@@ -1,17 +1,18 @@
 import {shuffle, showScreen} from "../utils.js";
+import {saveGameResult} from "../progress.js";
 
-const gameScreenBox = document.getElementById("game-screen"); // экран вопроса
-const closeButton = document.getElementById("close-btn");
-const wordText = document.getElementById("word");
-const countText = document.getElementById("count");
-const optionsBox = document.getElementById("options");
-const nextButton = document.getElementById("next");
+const gameScreenBox = document.getElementById("game-translate-screen"); // экран вопроса
+const closeButton = document.getElementById("translate-close");
+const wordText = document.getElementById("translate-word");
+const countText = document.getElementById("translate-count");
+const optionsBox = document.getElementById("translate-options");
+const nextButton = document.getElementById("translate-next");
 
-const endGameScreenBox = document.getElementById("end-game-screen"); // экран результата
-const resultText = document.getElementById("result-text");
-const resultScoreText = document.getElementById("result-score");
-const playAgainButton = document.getElementById("play-again");
-const toThemesButton = document.getElementById("to-themes");
+const endGameScreenBox = document.getElementById("translate-end-screen"); // экран результата
+const resultText = document.getElementById("translate-result-text");
+const resultScoreText = document.getElementById("translate-result-score");
+const playAgainButton = document.getElementById("translate-play-again");
+const toThemesButton = document.getElementById("translate-to-themes");
 
 const selectScreenBox = document.getElementById("select-screen");
 
@@ -32,8 +33,8 @@ let score = 0; // кол-во правильных ответов
 
 
 //начало игры
-export function startTranslateGame(game_theme) {
-    currentTheme = game_theme;
+export function startTranslateGame(gameTheme) {
+    currentTheme = gameTheme;
     questions = shuffle(currentTheme.words).slice(0, maxQuestions);
     index = 0;
     score = 0;
@@ -111,6 +112,7 @@ function showResult() {
     
     resultScoreText.textContent = `Правильных ответов: ${score} из ${questions.length}`;
 
+    saveGameResult("translate", currentTheme.id, score, questions.length);
     showScreen(endGameScreenBox);
 }
 
